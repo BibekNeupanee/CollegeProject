@@ -83,9 +83,7 @@ public class Dashboard extends JFrame {
 		btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				search();
-
 			}
 		});
 
@@ -324,5 +322,9 @@ public class Dashboard extends JFrame {
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+	}
+	public static void AddRowToJTable(Object[] dataRow) {
+		DefaultTableModel model = (DefaultTableModel) tblBillHistory.getModel();
+		model.addRow(dataRow);
 	}
 }
