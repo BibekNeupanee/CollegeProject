@@ -161,20 +161,13 @@ public class EditBill extends JFrame {
 
 		tblBill = new JTable();
 		tblBill.setModel(
-				new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Particulars", "Quantity", "Rate", "Amount"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class, String.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
+				new DefaultTableModel(new Object[][] {}, new String[] { "Particulars", "Quantity", "Rate", "Amount" }) {
+					Class[] columnTypes = new Class[] { String.class, String.class, String.class, String.class };
+
+					public Class getColumnClass(int columnIndex) {
+						return columnTypes[columnIndex];
+					}
+				});
 		tblBill.getColumnModel().getColumn(0).setResizable(false);
 		tblBill.getColumnModel().getColumn(0).setPreferredWidth(300);
 		tblBill.getColumnModel().getColumn(1).setResizable(false);
@@ -255,12 +248,12 @@ public class EditBill extends JFrame {
 		dateChooser = new JDateChooser();
 		date = new Date();
 		dateChooser.setDate(date);
-		
+
 		txtInvoiceNumber = new JTextField();
 		txtInvoiceNumber.setColumns(10);
 		txtInvoiceNumber.setEditable(false);
 		txtInvoiceNumber.setBorder(null);
-		
+
 		gl_layeredPane();
 
 		tblBill.addMouseListener(new MouseAdapter() {
@@ -314,96 +307,88 @@ public class EditBill extends JFrame {
 	}
 
 	public void gl_layeredPane() {
-		
+
 		lblInvoiceNumber = new JLabel("Bill No:");
-		
-		
+
 		gl_layeredPane = new GroupLayout(layeredPane);
-		gl_layeredPane.setHorizontalGroup(
-			gl_layeredPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_layeredPane.createSequentialGroup()
-					.addGroup(gl_layeredPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_layeredPane.createSequentialGroup()
-							.addGap(200)
-							.addComponent(lblTitle, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_layeredPane.createSequentialGroup()
-							.addGap(225)
-							.addComponent(lblAdress, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_layeredPane.createSequentialGroup()
-							.addGap(10)
-							.addGroup(gl_layeredPane.createParallelGroup(Alignment.TRAILING, false)
-								.addGroup(gl_layeredPane.createSequentialGroup()
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(txtCustomerName, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(lblDate, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
-								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 410, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_layeredPane.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(btnDelete)
-							.addGap(114)
-							.addGroup(gl_layeredPane.createParallelGroup(Alignment.TRAILING)
-								.addGroup(Alignment.LEADING, gl_layeredPane.createSequentialGroup()
-									.addComponent(lblBalance, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(txtBalance, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_layeredPane.createSequentialGroup()
-									.addGroup(gl_layeredPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblTotal, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblAdvance, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(gl_layeredPane.createParallelGroup(Alignment.LEADING, false)
-										.addComponent(txtAdvance, 0, 0, Short.MAX_VALUE)
-										.addComponent(txtTotal))
-									.addGap(105))))
-						.addGroup(gl_layeredPane.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(lblCustomerName, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_layeredPane.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(lblInvoiceNumber)
-							.addGap(18)
-							.addComponent(txtInvoiceNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
-		gl_layeredPane.setVerticalGroup(
-			gl_layeredPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_layeredPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblTitle)
-					.addGap(2)
-					.addComponent(lblAdress)
-					.addGap(50)
-					.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblInvoiceNumber)
-						.addComponent(txtInvoiceNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(57)
-					.addComponent(lblCustomerName)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_layeredPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblDate)
-							.addComponent(txtCustomerName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE)
-					.addGap(11)
-					.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblTotal)
-						.addComponent(txtTotal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblAdvance)
-						.addComponent(txtAdvance, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(13)
-					.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnDelete)
-						.addComponent(lblBalance)
-						.addComponent(txtBalance, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(134, Short.MAX_VALUE))
-		);
+		gl_layeredPane.setHorizontalGroup(gl_layeredPane.createParallelGroup(Alignment.LEADING).addGroup(gl_layeredPane
+				.createSequentialGroup()
+				.addGroup(gl_layeredPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_layeredPane.createSequentialGroup().addGap(200).addComponent(lblTitle,
+								GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_layeredPane.createSequentialGroup().addGap(225).addComponent(lblAdress,
+								GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_layeredPane.createSequentialGroup().addGap(10)
+								.addGroup(gl_layeredPane.createParallelGroup(Alignment.TRAILING, false)
+										.addGroup(gl_layeredPane.createSequentialGroup()
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(txtCustomerName, GroupLayout.PREFERRED_SIZE, 182,
+														GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
+														Short.MAX_VALUE)
+												.addComponent(lblDate, GroupLayout.PREFERRED_SIZE, 37,
+														GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(dateChooser,
+														GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE))
+										.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 410,
+												GroupLayout.PREFERRED_SIZE)))
+						.addGroup(
+								gl_layeredPane.createSequentialGroup().addContainerGap().addComponent(btnDelete)
+										.addGap(114)
+										.addGroup(gl_layeredPane.createParallelGroup(Alignment.TRAILING)
+												.addGroup(Alignment.LEADING, gl_layeredPane.createSequentialGroup()
+														.addComponent(lblBalance, GroupLayout.PREFERRED_SIZE, 74,
+																GroupLayout.PREFERRED_SIZE)
+														.addPreferredGap(ComponentPlacement.RELATED).addComponent(
+																txtBalance, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+												.addGroup(gl_layeredPane.createSequentialGroup()
+														.addGroup(gl_layeredPane.createParallelGroup(Alignment.LEADING)
+																.addComponent(lblTotal, GroupLayout.PREFERRED_SIZE, 40,
+																		GroupLayout.PREFERRED_SIZE)
+																.addComponent(lblAdvance, GroupLayout.PREFERRED_SIZE,
+																		74, GroupLayout.PREFERRED_SIZE))
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addGroup(gl_layeredPane
+																.createParallelGroup(Alignment.LEADING, false)
+																.addComponent(txtAdvance, 0, 0, Short.MAX_VALUE)
+																.addComponent(txtTotal))
+														.addGap(105))))
+						.addGroup(gl_layeredPane.createSequentialGroup().addContainerGap().addComponent(lblCustomerName,
+								GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))
+						.addGroup(
+								gl_layeredPane.createSequentialGroup().addContainerGap().addComponent(lblInvoiceNumber)
+										.addGap(18).addComponent(txtInvoiceNumber, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		gl_layeredPane.setVerticalGroup(gl_layeredPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_layeredPane.createSequentialGroup().addContainerGap().addComponent(lblTitle).addGap(2)
+						.addComponent(lblAdress).addGap(50)
+						.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE).addComponent(lblInvoiceNumber)
+								.addComponent(txtInvoiceNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(57).addComponent(lblCustomerName).addPreferredGap(ComponentPlacement.UNRELATED)
+						.addGroup(gl_layeredPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(dateChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE).addComponent(lblDate)
+										.addComponent(txtCustomerName, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE)
+						.addGap(11)
+						.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE).addComponent(lblTotal)
+								.addComponent(txtTotal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE).addComponent(lblAdvance)
+								.addComponent(txtAdvance, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(13)
+						.addGroup(gl_layeredPane.createParallelGroup(Alignment.BASELINE).addComponent(btnDelete)
+								.addComponent(lblBalance).addComponent(txtBalance, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addContainerGap(134, Short.MAX_VALUE)));
 		layeredPane.setLayout(gl_layeredPane);
 		contentPane.setLayout(gl_contentPane);
 	}
@@ -498,28 +483,38 @@ public class EditBill extends JFrame {
 	}
 
 	public void updating_into_database() {
+
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		DefaultTableModel model = (DefaultTableModel) tblBill.getModel();
 
-		// inserting into sql
-		Connection c = DatabaseConnection.getConnection();
-		String invoice_sql = "INSERT INTO invoice (customer, advance, date, invoice_no) " + "VALUES (?,?,?,?)";
+		// Updating into Invoice Table
+
+		Connection con = DatabaseConnection.getConnection();
+		String user = "Update invoice set customer = ?, advance = ?, date = ? WHERE id =" + this.id;
 		PreparedStatement prep;
-		int invoice_id = 0;
 		try {
-			prep = c.prepareStatement(invoice_sql, Statement.RETURN_GENERATED_KEYS);
+			prep = con.prepareStatement(user);
 			prep.setString(1, txtCustomerName.getText());
 			prep.setDouble(2, Double.parseDouble(txtAdvance.getText()));
 			prep.setString(3, df.format(dateChooser.getDate()));
-			prep.setInt(4, 0);
 			prep.executeUpdate();
-			ResultSet rs = prep.getGeneratedKeys();
-			if (rs.next()) {
-				invoice_id = rs.getInt(1);
-			}
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			JOptionPane.showMessageDialog(btnSave, "Error Updating");
 		}
+
+		// till here
+
+		// deleting in Database
+
+		String delete = "DELETE FROM invoice_detail WHERE id =" + this.id;
+		PreparedStatement p;
+		try {
+			p = con.prepareStatement(delete);
+			p.executeUpdate();
+		} catch (SQLException e1) {
+			JOptionPane.showMessageDialog(btnSave, "Error Deleting");
+		}
+
 		// till here
 
 		// adding bill table into sql
@@ -528,8 +523,8 @@ public class EditBill extends JFrame {
 					+ "VALUES (?,?,?,?)";
 			PreparedStatement invoice_detail_prep;
 			try {
-				invoice_detail_prep = c.prepareStatement(invoice_detail_sql);
-				invoice_detail_prep.setInt(1, invoice_id);
+				invoice_detail_prep = con.prepareStatement(invoice_detail_sql);
+				invoice_detail_prep.setInt(1, this.id);
 				invoice_detail_prep.setString(2, model.getValueAt(count, 0).toString());
 				invoice_detail_prep.setDouble(3, Double.parseDouble(model.getValueAt(count, 1).toString()));
 				invoice_detail_prep.setDouble(4, Double.parseDouble(model.getValueAt(count, 2).toString()));
@@ -540,7 +535,6 @@ public class EditBill extends JFrame {
 		}
 		// till here
 	}
-
 	public void addingdata_to_table() {
 
 		DefaultTableModel model = (DefaultTableModel) tblBill.getModel();
@@ -591,4 +585,5 @@ public class EditBill extends JFrame {
 		}
 		// till here
 	}
+
 }

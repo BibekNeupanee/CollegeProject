@@ -61,7 +61,6 @@ public class Dashboard extends JFrame {
 
 	public Dashboard(String username) {
 		this();
-
 		Username = username;
 		username(Username);
 	}
