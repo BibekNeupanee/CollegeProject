@@ -512,7 +512,7 @@ public class EditBill extends JFrame {
 			p = con.prepareStatement(delete);
 			p.executeUpdate();
 		} catch (SQLException e1) {
-			JOptionPane.showMessageDialog(btnSave, "Error Deleting");
+			JOptionPane.showMessageDialog(null, "Error Deleting Invoice Detail");
 		}
 
 		// till here
