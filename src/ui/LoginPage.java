@@ -120,7 +120,7 @@ public class LoginPage extends JFrame {
 			dashboard.setVisible(true);
 			dispose();
 		} else {
-			JOptionPane.showMessageDialog(btnLogin, "Wrong Username or Password");
+			JOptionPane.showMessageDialog(null, "Wrong Username or Password");
 		}
 	}
 }

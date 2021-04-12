@@ -33,7 +33,11 @@ public class Dashboard extends JFrame {
 
 	public String Username;
 
+	private GroupLayout gl_contentPane;
+
 	private JPanel contentPane;
+	private JScrollPane scrollPane;
+	private JPanel panel;
 
 	private JTextField txtUsername;
 	private JTextField txtSearch;
@@ -41,10 +45,20 @@ public class Dashboard extends JFrame {
 	private static JTable tblBillHistory;
 
 	private JButton btnPrintBill;
+	private JButton btnRefresh;
+	private JButton btnNewBill;
 	private JButton btnSearch;
 	private JButton btnEditBill;
+	private JButton btnBalance;
+	private JButton btnIncome;
 
 	private JMenuItem mnuitmChangePassword;
+	private JMenu menuSettings;
+	private JMenuItem mnuitmLogout;
+	private JMenuBar menuBar;
+
+	private JLabel lblSearch;
+	private JLabel lblBillHistory;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -73,12 +87,12 @@ public class Dashboard extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		JLabel lblSearch = new JLabel("Search:");
+		lblSearch = new JLabel("Search:");
 
 		txtSearch = new JTextField();
 		txtSearch.setColumns(10);
 
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 
 		btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
@@ -87,9 +101,9 @@ public class Dashboard extends JFrame {
 			}
 		});
 
-		JLabel lblBillHistory = new JLabel("Bill History:");
+		lblBillHistory = new JLabel("Bill History:");
 
-		JButton btnNewBill = new JButton("Add Bill");
+		btnNewBill = new JButton("Add Bill");
 		btnNewBill.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -104,24 +118,16 @@ public class Dashboard extends JFrame {
 		btnEditBill.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				DefaultTableModel model = (DefaultTableModel) tblBillHistory.getModel();
-
-				// i = the index of the selected row
-				int i = tblBillHistory.getSelectedRow();
-				int id = (int) model.getValueAt(i, 3);
-				EditBill editbill = new EditBill(id);
-				editbill.setVisible(true);
+				edit_bill();
 
 			}
 		});
 
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 
 		btnPrintBill = new JButton("Print Bill");
 
 		btnPrintBill.setEnabled(false);
-		;
-
 		btnPrintBill.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -133,7 +139,7 @@ public class Dashboard extends JFrame {
 		txtUsername.setColumns(10);
 		System.out.println(txtUsername.getText());
 
-		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh = new JButton("Refresh");
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -142,59 +148,28 @@ public class Dashboard extends JFrame {
 
 			}
 		});
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 823, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-										.addGroup(gl_contentPane.createSequentialGroup().addComponent(lblBillHistory)
-												.addGap(35).addComponent(btnRefresh))
-										.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(lblSearch, GroupLayout.PREFERRED_SIZE, 65,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED).addComponent(txtSearch,
-														GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)))
-								.addGap(87)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-										.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(btnSearch, GroupLayout.PREFERRED_SIZE, 122,
-												GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.RELATED, 151, Short.MAX_VALUE)
-								.addComponent(btnPrintBill).addGap(18).addComponent(btnEditBill)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(btnNewBill, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
-						.addComponent(panel, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 74,
-								GroupLayout.PREFERRED_SIZE))
-				.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addGroup(gl_contentPane
-				.createSequentialGroup()
-				.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(30)
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(19)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE).addComponent(lblSearch)
-										.addComponent(txtSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-										.addComponent(lblBillHistory).addComponent(btnRefresh)))
-						.addGroup(gl_contentPane.createSequentialGroup().addGap(7).addComponent(btnSearch).addGap(38)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE, false)
-										.addComponent(btnNewBill, GroupLayout.PREFERRED_SIZE, 45,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(btnEditBill).addComponent(btnPrintBill).addComponent(txtUsername,
-												GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE))))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE).addContainerGap()));
 
-		JMenuBar menuBar = new JMenuBar();
+		btnBalance = new JButton("Balance");
+		btnBalance.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				balance();
+			}
+		});
+
+		btnIncome = new JButton("Income");
+		btnIncome.setVisible(false);
+		btnIncome.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Income income = new Income();
+				income.setVisible(true);
+			}
+		});
+		group_layout();
+
+		menuBar = new JMenuBar();
 		panel.add(menuBar);
 
-		JMenu menuSettings = new JMenu("Settings");
+		menuSettings = new JMenu("Settings");
 		menuBar.add(menuSettings);
 
 		mnuitmChangePassword = new JMenuItem("Change Password");
@@ -207,7 +182,7 @@ public class Dashboard extends JFrame {
 		});
 		menuSettings.add(mnuitmChangePassword);
 
-		JMenuItem mnuitmLogout = new JMenuItem("Logout");
+		mnuitmLogout = new JMenuItem("Logout");
 		mnuitmLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -251,11 +226,83 @@ public class Dashboard extends JFrame {
 				editbill_validation();
 			}
 		});
+	}
+
+	public void balance() {
+		Balance balance = new Balance(this.Username);
+		balance.setVisible(true);
+	}
+
+	public void group_layout() {
+		gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
+				.createSequentialGroup().addContainerGap()
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 823, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup().addGroup(gl_contentPane
+								.createParallelGroup(Alignment.TRAILING)
+								.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createSequentialGroup().addGroup(gl_contentPane
+										.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_contentPane.createSequentialGroup().addComponent(lblBillHistory)
+												.addGap(35).addComponent(btnRefresh))
+										.addGroup(gl_contentPane.createSequentialGroup()
+												.addComponent(txtSearch, GroupLayout.PREFERRED_SIZE, 97,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(18).addComponent(btnSearch)))
+										.addGap(228)))
+								.addPreferredGap(ComponentPlacement.RELATED, 144, Short.MAX_VALUE)
+								.addComponent(btnIncome).addGap(32).addComponent(btnBalance).addGap(34)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(btnEditBill, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)
+										.addComponent(btnPrintBill, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)
+										.addComponent(btnNewBill, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)))
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+								.addComponent(lblSearch, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 684, Short.MAX_VALUE)
+								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)))
+				.addContainerGap()));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+												.addComponent(lblSearch).addComponent(panel, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addGap(30)
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+												.addGroup(Alignment.TRAILING,
+														gl_contentPane.createParallelGroup(Alignment.BASELINE)
+																.addComponent(lblBillHistory).addComponent(btnRefresh))
+												.addGroup(gl_contentPane.createSequentialGroup().addGap(68)
+														.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+												.addGroup(gl_contentPane.createSequentialGroup().addGap(29)
+														.addComponent(btnEditBill).addGap(18)
+														.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+																.addComponent(btnPrintBill).addComponent(btnBalance)
+																.addComponent(btnIncome))))
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+								.addGroup(gl_contentPane.createSequentialGroup().addGap(50).addComponent(btnNewBill))
+								.addGroup(gl_contentPane.createSequentialGroup().addGap(50)
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+												.addComponent(txtSearch, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(btnSearch))))
+						.addContainerGap()));
 
 	}
 
 	public void username(String username) {
 		this.txtUsername.setText(username);
+		if (username.equals("admin")) {
+			this.btnIncome.setVisible(true);
+		}
 
 	}
 
@@ -268,6 +315,16 @@ public class Dashboard extends JFrame {
 	public void change_password() {
 		ChangePassword changepassword = new ChangePassword(Username);
 		changepassword.setVisible(true);
+	}
+
+	public void edit_bill() {
+		DefaultTableModel model = (DefaultTableModel) tblBillHistory.getModel();
+
+		// i = the index of the selected row
+		int i = tblBillHistory.getSelectedRow();
+		int id = (int) model.getValueAt(i, 3);
+		EditBill editbill = new EditBill(id,this.Username);
+		editbill.setVisible(true);
 	}
 
 	public void database_thing() {
@@ -300,10 +357,9 @@ public class Dashboard extends JFrame {
 		DefaultTableModel model = (DefaultTableModel) tblBillHistory.getModel();
 		Connection con = DatabaseConnection.getConnection();
 		String query = "SELECT * FROM invoice WHERE customer LIKE '%" + txtSearch.getText() + "%' OR invoice_no ='"
-				+ txtSearch.getText()+"'";
+				+ txtSearch.getText() + "'";
 		PreparedStatement ps;
-		
-		
+
 		try {
 			int a = 0;
 			int rowCount = model.getRowCount();
@@ -323,6 +379,7 @@ public class Dashboard extends JFrame {
 			e1.printStackTrace();
 		}
 	}
+
 	public static void AddRowToJTable(Object[] dataRow) {
 		DefaultTableModel model = (DefaultTableModel) tblBillHistory.getModel();
 		model.addRow(dataRow);

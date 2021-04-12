@@ -557,10 +557,18 @@ public class NewBill extends JFrame {
 	public void adding_into_database() {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		DefaultTableModel model = (DefaultTableModel) tblBill.getModel();
-
-		// inserting into sql
+		
+		String paid = "n";
+		double total = Double.parseDouble(txtTotal.getText());
+		double advance = Double.parseDouble(txtAdvance.getText());
+		if(advance == total) {
+			paid = "y";
+		}
+		
+			
+			// inserting into sql
 		Connection c = DatabaseConnection.getConnection();
-		String invoice_sql = "INSERT INTO invoice (customer, advance, date, invoice_no) " + "VALUES (?,?,?,?)";
+		String invoice_sql = "INSERT INTO invoice (customer, advance, date, invoice_no,paid) " + "VALUES (?,?,?,?,?)";
 		PreparedStatement prep;
 		int invoice_id = 0;
 		String invoice_no = txtInvoiceNumber.getText();
@@ -570,6 +578,7 @@ public class NewBill extends JFrame {
 			prep.setDouble(2, Double.parseDouble(txtAdvance.getText()));
 			prep.setString(3, df.format(dateChooser.getDate()));
 			prep.setString(4, invoice_no);
+			prep.setString(5,paid);
 			prep.executeUpdate();
 			ResultSet rs = prep.getGeneratedKeys();
 			if (rs.next()) {

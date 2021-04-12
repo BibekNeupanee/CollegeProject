@@ -2,6 +2,7 @@ package ui;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -32,12 +33,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
+import javax.swing.JCheckBox;
 
 public class EditBill extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
 	public int id;
+	public String username;
 
 	private GroupLayout gl_layeredPane;
 	private GroupLayout gl_layeredPane_1;
@@ -82,6 +85,8 @@ public class EditBill extends JFrame {
 	private JScrollPane scrollPane;
 	private JLabel lblInvoiceNumber;
 	private JTextField txtInvoiceNumber;
+	private JCheckBox chckbxBillClearance;
+	private JTextField txtBillClearance;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -97,9 +102,12 @@ public class EditBill extends JFrame {
 		});
 	}
 
-	public EditBill(int id) {
+	public EditBill(int id, String username) {
 		this();
 		this.id = id;
+		this.username = username;
+		System.out.println(username);
+		user_validation();
 		addingdata_to_table();
 	}
 
@@ -154,6 +162,16 @@ public class EditBill extends JFrame {
 				updating_to_table();
 			}
 		});
+
+		chckbxBillClearance = new JCheckBox("Bill Cleared");
+		chckbxBillClearance.setVisible(false);
+
+		txtBillClearance = new JTextField();
+		txtBillClearance.setEditable(false);
+		txtBillClearance.setColumns(10);
+		txtBillClearance.setBorder(null);
+//		txtBillClearance.setFont(new Font("Verdana", Font.PLAIN, 14));
+//		txtBillClearance.setForeground(Color.red);
 
 		gl_layeredPane_1();
 
@@ -260,8 +278,7 @@ public class EditBill extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				btnUpdate.setEnabled(true);
-				btnDelete.setEnabled(true);
+				button_enable();
 				DefaultTableModel model = (DefaultTableModel) tblBill.getModel();
 				// i = the index of the selected row
 				int i = tblBill.getSelectedRow();
@@ -277,9 +294,19 @@ public class EditBill extends JFrame {
 				dispose();
 			}
 		});
-
+		txtCustomerName.setEditable(false);
+		dateChooser.setEnabled(false);
+		txtAdvance.setEditable(false);
+		btnAdd.setEnabled(false);
 	}
-
+	
+	public void button_enable() {
+		if (this.username.equals("admin")) {
+			btnUpdate.setEnabled(true);
+			btnDelete.setEnabled(true);
+		}
+	}
+	
 	public void gl_contentPane() {
 		gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
@@ -395,9 +422,9 @@ public class EditBill extends JFrame {
 
 	public void gl_layeredPane_1() {
 		gl_layeredPane_1 = new GroupLayout(layeredPane_1);
-		gl_layeredPane_1
-				.setHorizontalGroup(gl_layeredPane_1.createParallelGroup(Alignment.TRAILING).addGroup(gl_layeredPane_1
-						.createSequentialGroup().addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
+		gl_layeredPane_1.setHorizontalGroup(gl_layeredPane_1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_layeredPane_1.createSequentialGroup()
+						.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING, false)
 										.addComponent(lblRate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 												Short.MAX_VALUE)
@@ -405,8 +432,9 @@ public class EditBill extends JFrame {
 												Short.MAX_VALUE)
 										.addComponent(lblParticulars, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addGroup(gl_layeredPane_1
-										.createSequentialGroup().addContainerGap().addComponent(btnUpdate)))
+								.addGroup(gl_layeredPane_1.createSequentialGroup().addContainerGap()
+										.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
+												.addComponent(chckbxBillClearance).addComponent(btnUpdate))))
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING).addComponent(btnAdd)
 								.addComponent(txtParticulars, GroupLayout.PREFERRED_SIZE, 186,
@@ -415,7 +443,11 @@ public class EditBill extends JFrame {
 										.addComponent(txtRate, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
 										.addComponent(txtQuantity, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 57,
 												Short.MAX_VALUE)))
-						.addGap(290)));
+						.addGap(260))
+				.addGroup(Alignment.LEADING,
+						gl_layeredPane_1.createSequentialGroup().addContainerGap().addComponent(txtBillClearance,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap(439, Short.MAX_VALUE)));
 		gl_layeredPane_1.setVerticalGroup(gl_layeredPane_1.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_layeredPane_1.createSequentialGroup().addContainerGap()
 						.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.BASELINE).addComponent(lblParticulars)
@@ -429,9 +461,13 @@ public class EditBill extends JFrame {
 						.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.BASELINE).addComponent(lblRate)
 								.addComponent(txtRate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.PREFERRED_SIZE))
-						.addGap(18).addGroup(gl_layeredPane_1.createParallelGroup(Alignment.BASELINE)
-								.addComponent(btnUpdate).addComponent(btnAdd))
-						.addGap(452)));
+						.addGap(18)
+						.addGroup(gl_layeredPane_1.createParallelGroup(Alignment.BASELINE).addComponent(btnUpdate)
+								.addComponent(btnAdd))
+						.addGap(253).addComponent(chckbxBillClearance).addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(txtBillClearance, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(154)));
 		layeredPane_1.setLayout(gl_layeredPane_1);
 	}
 
@@ -487,16 +523,22 @@ public class EditBill extends JFrame {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		DefaultTableModel model = (DefaultTableModel) tblBill.getModel();
 
+		String paid = "n";
+		if (chckbxBillClearance.isSelected()) {
+			paid = "y";
+		}
+
 		// Updating into Invoice Table
 
 		Connection con = DatabaseConnection.getConnection();
-		String user = "Update invoice set customer = ?, advance = ?, date = ? WHERE id =" + this.id;
+		String user = "Update invoice set customer = ?, advance = ?, date = ?, paid = ? WHERE id =" + this.id;
 		PreparedStatement prep;
 		try {
 			prep = con.prepareStatement(user);
 			prep.setString(1, txtCustomerName.getText());
 			prep.setDouble(2, Double.parseDouble(txtAdvance.getText()));
 			prep.setString(3, df.format(dateChooser.getDate()));
+			prep.setString(4, paid);
 			prep.executeUpdate();
 		} catch (SQLException e1) {
 			JOptionPane.showMessageDialog(btnSave, "Error Updating");
@@ -535,6 +577,7 @@ public class EditBill extends JFrame {
 		}
 		// till here
 	}
+
 	public void addingdata_to_table() {
 
 		DefaultTableModel model = (DefaultTableModel) tblBill.getModel();
@@ -543,7 +586,7 @@ public class EditBill extends JFrame {
 		for (int i = rowCount - 1; i >= 0; i--) {
 			model.removeRow(i);
 		}
-
+		String paid = "";
 		Connection con = DatabaseConnection.getConnection();
 		String query = "SELECT particular, rate, quantity FROM invoice_detail WHERE invoice_id = " + this.id;
 		PreparedStatement ps;
@@ -562,7 +605,7 @@ public class EditBill extends JFrame {
 		}
 
 		// next
-		String query2 = "SELECT customer, advance, date, invoice_no FROM invoice WHERE id = " + this.id;
+		String query2 = "SELECT customer, advance, date, invoice_no, paid FROM invoice WHERE id = " + this.id;
 		PreparedStatement ps2;
 		try {
 			ps2 = con.prepareStatement(query2);
@@ -579,6 +622,12 @@ public class EditBill extends JFrame {
 				txtBalance.setText(Double.toString(sum - Double.parseDouble(rs.getString(2))));
 				dateChooser.setDate(rs.getDate(3));
 				txtInvoiceNumber.setText(rs.getString(4));
+				paid = rs.getString(5);
+			}
+			if (paid.equals("n")) {
+				chckbxBillClearance.setVisible(true);
+			} else {
+				txtBillClearance.setText("Bill Cleared");
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -586,4 +635,13 @@ public class EditBill extends JFrame {
 		// till here
 	}
 
+	public void user_validation() {
+		
+		if (this.username.equals("admin")) {
+			txtCustomerName.setEditable(true);
+			dateChooser.setEnabled(true);
+			txtAdvance.setEditable(true);
+			btnAdd.setEnabled(true);
+		}
+	}
 }
