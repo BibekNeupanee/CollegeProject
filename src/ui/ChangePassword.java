@@ -23,14 +23,19 @@ public class ChangePassword extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	private GroupLayout gl_contentPane;
+
 	private JPanel contentPane;
 	private JPasswordField txtOldPassword;
 	private JPasswordField txtNewPassword;
 	private JPasswordField txtConfirmPassword;
-	JButton btnSave;
+	private JButton btnSave;
 
 	private String username;
 	private JButton btnCancel;
+	private JLabel lblOldPassword;
+	private JLabel lblNewPassword;
+	private JLabel lblConfirmPassword;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -58,14 +63,14 @@ public class ChangePassword extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		JLabel lblOldPassword = new JLabel("Old Password:");
+		lblOldPassword = new JLabel("Old Password:");
 
 		txtOldPassword = new JPasswordField();
 		txtOldPassword.setColumns(64);
 
-		JLabel lblNewPassword = new JLabel("New Password:");
+		lblNewPassword = new JLabel("New Password:");
 
-		JLabel lblConfirmPassword = new JLabel("Confirm Password");
+		lblConfirmPassword = new JLabel("Confirm Password");
 
 		txtNewPassword = new JPasswordField();
 
@@ -83,10 +88,13 @@ public class ChangePassword extends JFrame {
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				oldPassword_Validation();
-				dispose();
 			}
 		});
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		grouping();
+	}
+
+	public void grouping() {
+		gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup().addGap(97)
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING).addComponent(lblOldPassword)
@@ -159,6 +167,7 @@ public class ChangePassword extends JFrame {
 		if (isvalid) {
 			if (txtNewPassword.getText().equals(txtConfirmPassword.getText())) {
 				password_validation();
+				dispose();
 			} else {
 				JOptionPane.showMessageDialog(btnSave, "New Password and Confirm Password Didnot Matched.");
 			}

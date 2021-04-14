@@ -24,9 +24,11 @@ import java.awt.Color;
 
 public class Splash extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+
 	private JPanel contentPane;
 	private static JProgressBar progressBar;
-	
+
 	public static void main(String[] args) {
 		int x;
 		Splash frame = new Splash();
@@ -35,11 +37,10 @@ public class Splash extends JFrame {
 			for (x = 0; x <= 100; x++) {
 				Splash.progressBar.setValue(x);
 				Thread.sleep(50);
-				if (x==100) {
+				if (x == 100) {
 					LoginPage loginpage = new LoginPage();
 					loginpage.setVisible(true);
 					frame.dispose();
-					
 				}
 			}
 		} catch (InterruptedException e) {
@@ -74,31 +75,26 @@ public class Splash extends JFrame {
 		progressBar = new JProgressBar();
 
 		progressBar.setForeground(new Color(0, 0, 255));
-		
-		
-		
+
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
+				.createSequentialGroup().addContainerGap()
+				.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addComponent(progressBar, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
-						.addGroup(Alignment.LEADING, gl_contentPane.createParallelGroup(Alignment.LEADING)
-							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 470, GroupLayout.PREFERRED_SIZE)
-							.addComponent(lblClose, Alignment.TRAILING)))
-					.addContainerGap())
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.LEADING,
+								gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(panel, GroupLayout.PREFERRED_SIZE, 470,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblClose, Alignment.TRAILING)))
+				.addContainerGap()));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(lblClose, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 262, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
-					.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
-		);
+						.addComponent(lblClose, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 262, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+						.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap()));
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(Splash.class.getResource("/icons/Nepalese Clothing.PNG")));

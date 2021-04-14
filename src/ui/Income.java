@@ -20,12 +20,27 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import com.toedter.calendar.JMonthChooser;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.awt.event.ActionEvent;
 import com.toedter.calendar.JDateChooser;
 
 public class Income extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+
+	private Date date;
+	private float daysBetween;
 
 	private GroupLayout gl_panelMonthly;
 	private GroupLayout gl_contentPane;
@@ -60,7 +75,7 @@ public class Income extends JFrame {
 	}
 
 	public Income() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 771, 339);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -74,24 +89,11 @@ public class Income extends JFrame {
 		panelMonthly.setBorder(BorderFactory.createTitledBorder("Monthly Income"));
 
 		btnDone = new JButton("Done");
-
-		gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane
-				.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(panelAnnual, GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE)
-										.addComponent(panelMonthly, GroupLayout.PREFERRED_SIZE, 725,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(btnDone, Alignment.TRAILING))
-								.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup().addGap(21)
-						.addComponent(panelAnnual, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-						.addGap(18)
-						.addComponent(panelMonthly, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, 25, Short.MAX_VALUE).addComponent(btnDone)
-						.addContainerGap()));
+		btnDone.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 
 		lblMonthlyIncome = new JLabel("Monthly Income From:");
 
@@ -101,23 +103,84 @@ public class Income extends JFrame {
 
 		txtMonthly = new JTextField();
 		txtMonthly.setEditable(false);
-		txtMonthly.setEnabled(false);
 		txtMonthly.setColumns(10);
-
 		btnMonthlyGo = new JButton("Go");
 		btnMonthlyGo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				if (dateChooserFrom.getDate() < dateChooserTo.getDate())) {
-					JOptionPane.showMessageDialog(null, "Error");
+				try {
+					Date dateBefore = dateChooserFrom.getDate();
+					Date dateAfter = dateChooserTo.getDate();
+					long difference = dateAfter.getTime() - dateBefore.getTime();
+					daysBetween = (difference / (1000 * 60 * 60 * 24));
+				} catch (Exception e1) {
+					e1.printStackTrace();
 				}
+				if (dateChooserFrom.getDate().after(dateChooserTo.getDate())) {
+					JOptionPane.showMessageDialog(null, "Enter Valid Date");
+				}else if (daysBetween > 30) {
+					JOptionPane.showMessageDialog(null, "Days cannot exceed 30 days");
+				} else {
+					DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+					Connection con = DatabaseConnection.getConnection();
 
+					String query = "SELECT \r\n" + "  SUM(id.rate * id.quantity) AS Total\r\n" + "FROM\r\n"
+							+ "    billing_system.invoice AS i\r\n" + "        INNER JOIN\r\n"
+							+ "    billing_system.invoice_detail AS id ON i.id = id.invoice_id\r\n"
+							+ "    where i.date >= '" + df.format(dateChooserFrom.getDate()) + "'AND i.date <= '"
+							+ df.format(dateChooserTo.getDate()) + "'";
+
+					PreparedStatement ps;
+					try {
+						ps = con.prepareStatement(query);
+						ResultSet rs = ps.executeQuery();
+						while (rs.next()) {
+							if (rs.getObject(1) != null && !rs.wasNull()) {
+								txtMonthly.setText(rs.getString(1));
+							} else {
+								txtMonthly.setText("0");
+							}
+						}
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
 			}
 		});
 
 		dateChooserFrom = new JDateChooser();
-
+		date = new Date();
+		dateChooserFrom.setDate(date);
 		dateChooserTo = new JDateChooser();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String fromDate = df.format(dateChooserFrom.getDate());
+		LocalDate arrival = LocalDate.parse(fromDate, formatter);
+		LocalDate toDate = arrival.plusDays(30);
+		String nextDate = toDate.format(formatter);
+		try {
+			dateChooserTo.setDate(df.parse(nextDate));
+		} catch (ParseException e2) {
+			e2.printStackTrace();
+		}
+
+		
+
+		gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup().addContainerGap()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(panelAnnual, GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE)
+								.addComponent(panelMonthly, GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE)
+								.addComponent(btnDone, Alignment.TRAILING))
+						.addContainerGap()));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup().addGap(21)
+						.addComponent(panelAnnual, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
+						.addGap(18)
+						.addComponent(panelMonthly, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED, 25, Short.MAX_VALUE).addComponent(btnDone)
+						.addContainerGap()));
+
 		gl_panelMonthly = new GroupLayout(panelMonthly);
 		gl_panelMonthly.setHorizontalGroup(gl_panelMonthly.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelMonthly.createSequentialGroup().addContainerGap().addGroup(gl_panelMonthly
@@ -156,10 +219,31 @@ public class Income extends JFrame {
 
 		txtAnnual = new JTextField();
 		txtAnnual.setEditable(false);
-		txtAnnual.setEnabled(false);
 		txtAnnual.setColumns(10);
 
 		btnAnnualGo = new JButton("Go");
+		btnAnnualGo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				Connection con = DatabaseConnection.getConnection();
+
+				String query = "SELECT \r\n" + "  SUM(id.rate * id.quantity) AS Total\r\n" + "FROM\r\n"
+						+ "    billing_system.invoice AS i\r\n" + "        INNER JOIN\r\n"
+						+ "    billing_system.invoice_detail AS id ON i.id = id.invoice_id\r\n"
+						+ "    where year(i.date) = " + yearChooser.getYear();
+
+				PreparedStatement ps;
+				try {
+					ps = con.prepareStatement(query);
+					ResultSet rs = ps.executeQuery();
+					while (rs.next()) {
+						txtAnnual.setText(rs.getString(1));
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		GroupLayout gl_panelAnnual = new GroupLayout(panelAnnual);
 		gl_panelAnnual.setHorizontalGroup(gl_panelAnnual.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelAnnual.createSequentialGroup().addContainerGap()

@@ -127,11 +127,14 @@ public class NewBill extends JFrame {
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Integer.parseInt(txtQuantity.getText());
-					Integer.parseInt(txtRate.getText());
+					Double.parseDouble(txtQuantity.getText());
+					Double.parseDouble(txtRate.getText());
 					if (txtParticulars.getText().isEmpty() || txtQuantity.getText().isEmpty()
 							|| txtRate.getText().isEmpty()) {
 						JOptionPane.showMessageDialog(null, "Above information must be filled.");
+					} else if (Double.parseDouble(txtQuantity.getText()) < 0
+							&& Double.parseDouble(txtRate.getText()) < 0) {
+						JOptionPane.showMessageDialog(null, "Quantity And Rate must not be less Than 0.");
 					} else {
 						updating_to_table();
 					}
@@ -145,12 +148,29 @@ public class NewBill extends JFrame {
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Integer.parseInt(txtQuantity.getText());
-					Integer.parseInt(txtRate.getText());
+					Double.parseDouble(txtQuantity.getText());
+					Double.parseDouble(txtRate.getText());
+					boolean kabTaken = false;
+					int a = tblBill.getModel().getRowCount();
+					for (int i = 0; i < a; i++) {
+						if (txtParticulars.getText().equals(tblBill.getValueAt(i, 0).toString())
+								&& Double.parseDouble(txtQuantity.getText()) == Double
+										.parseDouble(tblBill.getValueAt(i, 1).toString())
+								&& Double.parseDouble(txtRate.getText()) == Double
+										.parseDouble((tblBill.getValueAt(i, 2).toString()))) {
+							kabTaken = true;
+						}
+					}
 					if (txtParticulars.getText().isEmpty() || txtQuantity.getText().isEmpty()
 							|| txtRate.getText().isEmpty()) {
 						JOptionPane.showMessageDialog(null, "Above information must be filled.");
+					} else if (Double.parseDouble(txtQuantity.getText()) < 0
+							&& Double.parseDouble(txtRate.getText()) < 0) {
+						JOptionPane.showMessageDialog(null, "Quantity And Rate must not be less Than 0.");
+					} else if (kabTaken) {
+						JOptionPane.showMessageDialog(null, "Value already in table. Cannot add");
 					} else {
+						kabTaken = false;
 						adding_into_table();
 					}
 				} catch (Exception e2) {
@@ -191,8 +211,6 @@ public class NewBill extends JFrame {
 		tblBill = new JTable();
 		tblBill.setModel(
 				new DefaultTableModel(new Object[][] {}, new String[] { "Particulars", "Quantity", "Rate", "Amount" }) {
-					private static final long serialVersionUID = 1L;
-
 					Class[] columnTypes = new Class[] { String.class, String.class, String.class, String.class };
 
 					public Class getColumnClass(int columnIndex) {
@@ -283,7 +301,7 @@ public class NewBill extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+
 				btnUpdate.setEnabled(true);
 				btnDelete.setEnabled(true);
 				DefaultTableModel model = (DefaultTableModel) tblBill.getModel();
@@ -546,27 +564,26 @@ public class NewBill extends JFrame {
 			JOptionPane.showMessageDialog(btnDelete, "Delete Failed");
 		}
 
-		int sum = 0;
+		double sum = 0;
 		for (int a = 0; a < tblBill.getRowCount(); a++) {
-			sum = sum + Integer.parseInt(tblBill.getValueAt(a, 3).toString());
+			sum = sum + Double.parseDouble(tblBill.getValueAt(a, 3).toString());
 		}
-		txtTotal.setText(Integer.toString(sum));
+		txtTotal.setText(Double.toString(sum));
 
 	}
 
 	public void adding_into_database() {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		DefaultTableModel model = (DefaultTableModel) tblBill.getModel();
-		
+
 		String paid = "n";
 		double total = Double.parseDouble(txtTotal.getText());
 		double advance = Double.parseDouble(txtAdvance.getText());
-		if(advance == total) {
+		if (advance == total) {
 			paid = "y";
 		}
-		
-			
-			// inserting into sql
+
+		// inserting into sql
 		Connection c = DatabaseConnection.getConnection();
 		String invoice_sql = "INSERT INTO invoice (customer, advance, date, invoice_no,paid) " + "VALUES (?,?,?,?,?)";
 		PreparedStatement prep;
@@ -578,7 +595,7 @@ public class NewBill extends JFrame {
 			prep.setDouble(2, Double.parseDouble(txtAdvance.getText()));
 			prep.setString(3, df.format(dateChooser.getDate()));
 			prep.setString(4, invoice_no);
-			prep.setString(5,paid);
+			prep.setString(5, paid);
 			prep.executeUpdate();
 			ResultSet rs = prep.getGeneratedKeys();
 			if (rs.next()) {

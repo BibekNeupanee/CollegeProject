@@ -151,7 +151,35 @@ public class EditBill extends JFrame {
 		btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				adding_into_table();
+				try {
+					Double.parseDouble(txtQuantity.getText());
+					Double.parseDouble(txtRate.getText());
+					boolean kabTaken = false;
+					int a = tblBill.getModel().getRowCount();
+					for (int i = 0; i < a; i++) {
+						if (txtParticulars.getText().equals(tblBill.getValueAt(i, 0).toString())
+								&& Double.parseDouble(txtQuantity.getText()) == Double
+										.parseDouble(tblBill.getValueAt(i, 1).toString())
+								&& Double.parseDouble(txtRate.getText()) == Double
+										.parseDouble((tblBill.getValueAt(i, 2).toString()))) {
+							kabTaken = true;
+						}
+					}
+					if (txtParticulars.getText().isEmpty() || txtQuantity.getText().isEmpty()
+							|| txtRate.getText().isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Above information must be filled.");
+					} else if (Double.parseDouble(txtQuantity.getText()) < 0
+							&& Double.parseDouble(txtRate.getText()) < 0) {
+						JOptionPane.showMessageDialog(null, "Quantity And Rate must not be less Than 0.");
+					} else if (kabTaken) {
+						JOptionPane.showMessageDialog(null, "Value already in table. Cannot add");
+					} else {
+						kabTaken = false;
+						adding_into_table();
+					}
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, "Quantity And Rate must not be in Character.");
+				}
 			}
 		});
 
@@ -159,7 +187,21 @@ public class EditBill extends JFrame {
 		btnUpdate.setEnabled(false);
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				updating_to_table();
+				try {
+					Double.parseDouble(txtQuantity.getText());
+					Double.parseDouble(txtRate.getText());
+					if (txtParticulars.getText().isEmpty() || txtQuantity.getText().isEmpty()
+							|| txtRate.getText().isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Above information must be filled.");
+					} else if (Double.parseDouble(txtQuantity.getText()) < 0
+							&& Double.parseDouble(txtRate.getText()) < 0) {
+						JOptionPane.showMessageDialog(null, "Quantity And Rate must not be less Than 0.");
+					} else {
+						updating_to_table();
+					}
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, "Quantity And Rate must not be in Character Or Less Than 0.");
+				}
 			}
 		});
 
@@ -299,14 +341,14 @@ public class EditBill extends JFrame {
 		txtAdvance.setEditable(false);
 		btnAdd.setEnabled(false);
 	}
-	
+
 	public void button_enable() {
 		if (this.username.equals("admin")) {
 			btnUpdate.setEnabled(true);
 			btnDelete.setEnabled(true);
 		}
 	}
-	
+
 	public void gl_contentPane() {
 		gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
@@ -636,7 +678,7 @@ public class EditBill extends JFrame {
 	}
 
 	public void user_validation() {
-		
+
 		if (this.username.equals("admin")) {
 			txtCustomerName.setEditable(true);
 			dateChooser.setEnabled(true);

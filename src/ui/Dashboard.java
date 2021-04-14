@@ -137,7 +137,6 @@ public class Dashboard extends JFrame {
 		txtUsername.setEditable(false);
 		txtUsername.setBorder(null);
 		txtUsername.setColumns(10);
-		System.out.println(txtUsername.getText());
 
 		btnRefresh = new JButton("Refresh");
 		btnRefresh.addActionListener(new ActionListener() {
