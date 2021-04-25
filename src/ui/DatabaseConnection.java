@@ -9,22 +9,6 @@ import java.sql.Statement;
 
 public class DatabaseConnection {
 	private static Connection connection;
-
-	public static void main(String[] args) throws SQLException {
-		Connection con = DatabaseConnection.getConnection();
-//		
-//		Statement st =  con.createStatement();
-//		ResultSet rs = st.executeQuery("select * from user where username = 'admin'");
-//		boolean check = false;
-//		while(rs.next()) {
-//			check = true;
-//			String username = rs.getString("username");
-//			System.out.println(username);
-//		}
-//		System.out.println(check);
-
-	}
-
 	public static Connection getConnection() {
 		String url = "jdbc:mysql://localhost:3306/billing_system";
 		final String uname = "root";
@@ -37,7 +21,6 @@ public class DatabaseConnection {
 			System.out.println(ex);
 
 		}
-		System.out.println("bibek");
 		return null;
 
 	}

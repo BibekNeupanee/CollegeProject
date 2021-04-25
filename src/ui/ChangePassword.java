@@ -57,6 +57,7 @@ public class ChangePassword extends JFrame {
 	}
 
 	public ChangePassword() {
+		setTitle("Change Password");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 687, 399);
 		contentPane = new JPanel();

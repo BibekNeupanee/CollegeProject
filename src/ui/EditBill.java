@@ -112,7 +112,7 @@ public class EditBill extends JFrame {
 	}
 
 	public EditBill() {
-		setTitle("New Bill");
+		setTitle("Edit Bill");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 873, 714);
 		contentPane = new JPanel();

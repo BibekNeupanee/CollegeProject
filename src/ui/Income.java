@@ -75,6 +75,7 @@ public class Income extends JFrame {
 	}
 
 	public Income() {
+		setTitle("Income");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 771, 339);
 		contentPane = new JPanel();

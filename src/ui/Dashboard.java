@@ -5,11 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -26,6 +29,8 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.ImageIcon;
+import javax.swing.SwingConstants;
 
 public class Dashboard extends JFrame {
 
@@ -82,7 +87,7 @@ public class Dashboard extends JFrame {
 	public Dashboard() {
 		setTitle("Dashboard");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 869, 461);
+		setBounds(100, 100, 972, 504);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -95,8 +100,11 @@ public class Dashboard extends JFrame {
 		scrollPane = new JScrollPane();
 
 		btnSearch = new JButton("Search");
+
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				btnPrintBill.setEnabled(false);
+				btnEditBill.setEnabled(false);
 				search();
 			}
 		});
@@ -130,6 +138,7 @@ public class Dashboard extends JFrame {
 		btnPrintBill.setEnabled(false);
 		btnPrintBill.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				print_bill();
 			}
 		});
 
@@ -138,10 +147,14 @@ public class Dashboard extends JFrame {
 		txtUsername.setBorder(null);
 		txtUsername.setColumns(10);
 
-		btnRefresh = new JButton("Refresh");
+		btnRefresh = new JButton("");
+		btnRefresh.setIcon(new ImageIcon(Dashboard.class.getResource("/icons/Refresh.jpg")));
+		btnRefresh.setBorder(null);
+		btnRefresh.doClick();
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				btnPrintBill.setEnabled(false);
+				btnEditBill.setEnabled(false);
 				txtSearch.setText("");
 				database_thing();
 
@@ -233,67 +246,82 @@ public class Dashboard extends JFrame {
 	}
 
 	public void group_layout() {
+
+		JLabel lblUserName = new JLabel("Welcome,");
 		gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane
-				.createSequentialGroup().addContainerGap()
-				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 823, Short.MAX_VALUE)
-						.addGroup(gl_contentPane.createSequentialGroup().addGroup(gl_contentPane
-								.createParallelGroup(Alignment.TRAILING)
-								.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_contentPane.createSequentialGroup().addGroup(gl_contentPane
-										.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_contentPane.createSequentialGroup().addComponent(lblBillHistory)
-												.addGap(35).addComponent(btnRefresh))
-										.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(txtSearch, GroupLayout.PREFERRED_SIZE, 97,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(18).addComponent(btnSearch)))
-										.addGap(228)))
-								.addPreferredGap(ComponentPlacement.RELATED, 144, Short.MAX_VALUE)
-								.addComponent(btnIncome).addGap(32).addComponent(btnBalance).addGap(34)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(btnEditBill, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(btnPrintBill, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(btnNewBill, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)))
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-								.addComponent(lblSearch, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 684, Short.MAX_VALUE)
-								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)))
-				.addContainerGap()));
-		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 926, Short.MAX_VALUE)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblSearch, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtSearch, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-												.addComponent(lblSearch).addComponent(panel, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addGap(30)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addGroup(Alignment.TRAILING,
-														gl_contentPane.createParallelGroup(Alignment.BASELINE)
-																.addComponent(lblBillHistory).addComponent(btnRefresh))
-												.addGroup(gl_contentPane.createSequentialGroup().addGap(68)
-														.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-												.addGroup(gl_contentPane.createSequentialGroup().addGap(29)
-														.addComponent(btnEditBill).addGap(18)
-														.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-																.addComponent(btnPrintBill).addComponent(btnBalance)
-																.addComponent(btnIncome))))
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
-								.addGroup(gl_contentPane.createSequentialGroup().addGap(50).addComponent(btnNewBill))
-								.addGroup(gl_contentPane.createSequentialGroup().addGap(50)
+									.addPreferredGap(ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+									.addComponent(lblBillHistory)
+									.addPreferredGap(ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+									.addComponent(btnRefresh)
+									.addGap(377)
+									.addComponent(btnIncome)
+									.addGap(32)
+									.addComponent(btnBalance)
+									.addGap(34))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnSearch)
+									.addPreferredGap(ComponentPlacement.RELATED)))
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(btnEditBill, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnPrintBill, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnNewBill, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblUserName)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, 721, Short.MAX_VALUE)
+							.addComponent(panel, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+									.addComponent(lblUserName)
+									.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(30)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+									.addComponent(lblBillHistory)
+									.addComponent(btnRefresh))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblSearch)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(btnEditBill)
+											.addGap(18)
+											.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+												.addComponent(btnPrintBill)
+												.addComponent(btnBalance)
+												.addComponent(btnIncome)))
 										.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-												.addComponent(txtSearch, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(btnSearch))))
-						.addContainerGap()));
+											.addComponent(txtSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addComponent(btnSearch)))))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(50)
+							.addComponent(btnNewBill)))
+					.addContainerGap())
+		);
 
 	}
 
@@ -316,13 +344,21 @@ public class Dashboard extends JFrame {
 		changepassword.setVisible(true);
 	}
 
+	public void print_bill() {
+		DefaultTableModel model = (DefaultTableModel) tblBillHistory.getModel();
+		int i = tblBillHistory.getSelectedRow();
+		int id = (int) model.getValueAt(i, 3);
+		PrintBill printbill = new PrintBill(id);
+		printbill.setVisible(true);
+	}
+
 	public void edit_bill() {
 		DefaultTableModel model = (DefaultTableModel) tblBillHistory.getModel();
 
 		// i = the index of the selected row
 		int i = tblBillHistory.getSelectedRow();
 		int id = (int) model.getValueAt(i, 3);
-		EditBill editbill = new EditBill(id,this.Username);
+		EditBill editbill = new EditBill(id, this.Username);
 		editbill.setVisible(true);
 	}
 

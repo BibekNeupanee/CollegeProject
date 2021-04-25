@@ -1,26 +1,19 @@
 package ui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.Frame;
-import java.awt.Panel;
+import java.awt.Color;
+import java.awt.SystemColor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import projectPractice.ProgressBar;
-
-import javax.swing.JProgressBar;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.SystemColor;
-import java.awt.Color;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.border.EmptyBorder;
 
 public class Splash extends JFrame {
 
@@ -36,7 +29,7 @@ public class Splash extends JFrame {
 		try {
 			for (x = 0; x <= 100; x++) {
 				Splash.progressBar.setValue(x);
-				Thread.sleep(50);
+				Thread.sleep(30);
 				if (x == 100) {
 					LoginPage loginpage = new LoginPage();
 					loginpage.setVisible(true);
@@ -46,7 +39,6 @@ public class Splash extends JFrame {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public Splash() {
@@ -63,9 +55,7 @@ public class Splash extends JFrame {
 		lblClose.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
 				System.exit(0);
-
 			}
 		});
 		lblClose.setIcon(new ImageIcon(Splash.class.getResource("/icons/close.png")));
